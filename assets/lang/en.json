@@ -1,0 +1,15 @@
+{
+    "login_page_title": "Login Page",
+    "login_page_username_hint": "Username",
+    "login_page_password_hint": "Password",
+    "login_page_button": "Login",
+    "login_success_message": "You logged in!",
+    "login_error_message": "Username or password incorrect",
+
+    "home_page_title": "Home Page",
+
+
+    "door_page_button": "Door open",
+    "door_success_message": "door opened!",
+    "door_error_message": "The Door Could Not Open!"
+}

@@ -1,0 +1,15 @@
+{
+    "login_page_title": "Giriş Sayfası",
+    "login_page_username_hint": "Kullanıcı adı",
+    "login_page_password_hint": "Şifre",
+    "login_page_button": "Giriş",
+    "login_success_message": "Giriş Yapıldı!",
+    "login_error_message": "Kullanıcı adı yada şifre hatalı",
+
+    "home_page_title": "Ana Sayfa",
+
+
+    "door_page_button": "Kapıyı aç",
+    "door_success_message": "Kapı açıldı!",
+    "door_error_message": "Kapı Açılamadı!"
+}
