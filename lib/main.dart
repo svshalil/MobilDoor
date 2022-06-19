@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:widget_utils/widget_utils.dart';
@@ -5,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_session/flutter_session.dart';
 
 import 'model.dart';
-import 'hamepage.dart';
+import 'homepage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -47,6 +49,7 @@ class _LoginPageState extends State<LoginPage> {
       TextEditingController();
   final TextEditingController _passwordTextEditingController =
       TextEditingController();
+  //final url = Uri.parse('http://78.188.229.240/doorAPI/Register');
   final url = Uri.parse('http://mobilapi.ucgteknoloji.com/Register');
 
   Future callToken() async {
@@ -62,6 +65,8 @@ class _LoginPageState extends State<LoginPage> {
         var result = tokenFromJson(response.body);
         //this.createSuccessToast(context, result.accessToken);
         await FlutterSession().set("token", result.accessToken);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const HomePageApp()));
       } else {
         // ignore: use_build_context_synchronously
         createErrorToast(
@@ -193,11 +198,6 @@ class _LoginPageState extends State<LoginPage> {
       child: InkWell(
         onTap: () {
           callToken();
-          dynamic token = FlutterSession().get("token");
-          if (token.toString() != "") {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomePageApp()));
-          }
         },
         child: Container(
           padding: EdgeInsets.symmetric(vertical: convertSize(8)),

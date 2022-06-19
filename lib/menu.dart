@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
 
+import 'menubutton.dart';
+import 'homepage.dart';
+
 class DrawerFb1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Material(
-        color: Color(0xff4338CA),
+        color: Colors.blue,
         child: ListView(
           children: <Widget>[
             Container(
               padding: EdgeInsets.all(15.0),
               child: Column(
                 children: [
+                  TopBarFb4(
+                    onTapMenu: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
                   const SizedBox(height: 12),
                   SearchFieldDrawer(),
                   const SizedBox(height: 12),

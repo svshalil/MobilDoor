@@ -1,10 +1,11 @@
-import 'package:flutter/gestures.dart';
+// ignore_for_file: non_constant_identifier_names, unused_element, import_of_legacy_library_into_null_safe, prefer_interpolation_to_compose_strings, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:widget_utils/widget_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_session/flutter_session.dart';
 
-import 'doorpostmodel.dart';
+import 'menubutton.dart';
 import 'menu.dart';
 
 class HomePageApp extends StatelessWidget {
@@ -40,20 +41,32 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool click = true;
-  final url = Uri.parse('http://mobilapi.ucgteknoloji.com/Register');
+  String tokentext = "";
+  var result = "";
+  final url = Uri.parse(
+      'http://mobilapi.ucgteknoloji.com/api/MobilApi/SetDoorProcessService');
 
-  Future callToken() async {
+  Future callDoor() async {
     try {
-      final response = await http.post(url,
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-          body: {'grant_type': 'password'});
+      final token = await FlutterSession().get("token");
+      final response = await http.post(url, headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'bearer $token'
+      });
       if (response.statusCode == 200) {
-        var result = doorResponseFromJson(response.body);
-        //this.createSuccessToast(context, result.accessToken);
+        result = response.body;
+        if (result == "0") {
+          createSuccessToast(context, l("door_success_message"));
+        } else {
+          createErrorToast(
+              context, l("door_error_message") + " ErrorCode: $result");
+        }
       } else {
-        // ignore: use_build_context_synchronously
         createErrorToast(
-            context, l("login_error_message") + response.statusCode.toString());
+            context,
+            l("door_error_message") +
+                " StatusCode: " +
+                response.statusCode.toString());
       }
     } catch (e) {
       createErrorToast(context, e.toString());
@@ -84,12 +97,20 @@ class _HomePageState extends State<HomePage> {
           bottomRight: Radius.circular(convertSize(35)),
         ),
       ),
-      child: Image.asset(
-        "assets/image/door.png",
-        width: convertSize(200),
-        height: convertSize(200),
-        fit: BoxFit.contain,
-      ),
+      child: Column(children: [
+        TopBarFb4(
+          onTapMenu: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => DrawerFb1()));
+          },
+        ),
+        Image.asset(
+          "assets/image/door.png",
+          width: convertSize(200),
+          height: convertSize(200),
+          fit: BoxFit.contain,
+        )
+      ]),
     );
   }
 
@@ -154,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                   size: getFontSize(SizeType.Middle),
                 ),
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.all(0),
+                contentPadding: const EdgeInsets.all(0),
                 hintText: l(hintText)),
           ),
         ));
@@ -162,20 +183,19 @@ class _HomePageState extends State<HomePage> {
 
   Widget _HomePageButton(BuildContext context) {
     return Material(
-      color: (click == true) ? Colors.red : Colors.greenAccent,
+      color: (result != "0") ? Colors.red : Colors.greenAccent,
       elevation: 5.0,
       shadowColor: Colors.blue,
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(convertSize(12))),
+          borderRadius: BorderRadius.circular(convertSize(24))),
       child: InkWell(
-        onTap: () {
-          setState(() {
-            click = !click;
-          });
-          //callToken();
-        },
+        onTap: result != "0"
+            ? () {
+                callDoor();
+              }
+            : null,
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: convertSize(8)),
+          padding: EdgeInsets.symmetric(vertical: convertSize(50)),
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Icon(
               Icons.door_back_door,
